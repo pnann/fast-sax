@@ -1,0 +1,55 @@
+{
+  "name": "fast-sax",
+  "version": "0.1.0",
+  "description": "A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser.",
+  "author": "Paul Nann",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pnann/fast-sax.git"
+  },
+  "main": "lib/FastSax.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "ava": {
+    "files": [
+      "lib/tst/TestCases/**/*.js"
+    ]
+  },
+  "nyc": {
+    "lines": 100,
+    "statements": 99,
+    "functions": 96,
+    "branches": 96,
+    "cache": false,
+    "check-coverage": true,
+    "exclude": [
+      "lib/tst",
+      "node_modules"
+    ],
+    "reporter": [
+      "lcov",
+      "html"
+    ]
+  },
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "chai": "^3.5.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-ava": "^0.14.1",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-transform": "^1.1.0",
+    "gulp-typescript": "^3.0.2",
+    "gulp-typings": "^2.0.4",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "merge2": "^1.0.2",
+    "nyc": "^8.3.2",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0",
+    "typescript": "^2.0.3"
+  }
+}
