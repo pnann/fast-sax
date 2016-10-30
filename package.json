@@ -12,6 +12,7 @@
   "scripts": {
     "test": "gulp test"
   },
+  "typings": "lib/src/FastSax.d.ts",
   "ava": {
     "files": [
       "lib/tst/TestCases/**/*.js"

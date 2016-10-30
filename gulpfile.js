@@ -43,17 +43,10 @@ gulp.task("build", ["typings"], function () {
     var tsResult = gulp.src(sourceGlob)
         .pipe(tsSourceProject(ts.reporter.longReporter()));
 
-    var source = tsResult.js
-        .pipe(gulp.dest(sourceOutputDir));
-
-    var definitions = tsResult.dts
-        .pipe(rename((path) => {
-            path.basename = browserOutputName;
-            path.extname = ".d.ts";
-        }))
-        .pipe(gulp.dest(browserOutputDir));
-
-    return merge([source, definitions])
+    return merge([
+        tsResult.js.pipe(gulp.dest(sourceOutputDir)),
+        tsResult.dts.pipe(gulp.dest(sourceOutputDir))
+    ]);
 });
 
 gulp.task("watch-build", ["build"], function () {

@@ -1,5 +1,5 @@
 /**
- * A basic, minimal, fast XML FastSax with a SAX-like API.
+ * A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser.
  */
 declare class FastSax {
     private static OPEN_BRACKET;
