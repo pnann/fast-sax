@@ -78,7 +78,12 @@ gulp.task("coveralls", function () {
         .pipe(coveralls());
 });
 
-gulp.task("build-dist", ["build"], function () {
+gulp.task("copy-d-ts", ["build"], function () {
+    return gulp.src(`./${browserStandaloneName}.d.ts`)
+        .pipe(gulp.dest(browserOutputDir));
+});
+
+gulp.task("build-dist", ["build", "copy-d-ts"], function () {
     /*
      * Browserify has overhead which nearly doubles the size of the FastSax bundle. As FastSax is a single self-contained
      * CommonJS file, it is reasonable to instead wrap it in an IIFE and expose it on the window.
