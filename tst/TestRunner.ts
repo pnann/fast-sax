@@ -1,10 +1,5 @@
-/// <reference path="../typings/index.d.ts" />
-
-import ava = require("ava");
-import test = ava.test;
-
 import chai = require("chai");
-import expect = chai.expect;
+const expect = chai.expect;
 
 import sinon = require("sinon");
 import sinonChai = require("sinon-chai");
@@ -18,7 +13,7 @@ function runTest(testCase: TestCase) {
     const parser = new FastSax();
     const allEventTypes = ["onCData", "onComment", "onElementStart", "onElementEnd", "onText"];
 
-    test(testCase.name, t => {
+    it(testCase.name, () => {
 
         /*
          * Expected callbacks should be the only ones called, and they should be called in order. Any unexpected
@@ -39,9 +34,12 @@ function runTest(testCase: TestCase) {
 
         for (let name of allEventTypes) {
             if (!callbackQueue[name]) {
-                parser[name] = () => t.fail(`Unexpected call to '${name}'`);
+                parser[name] = () => {
+                    throw new Error(`Unexpected call to '${name}'`)
+                };
             }
         }
+
         parser.parse(testCase.input);
 
         for (let expected of testCase.expect) {

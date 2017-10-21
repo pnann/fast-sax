@@ -1,6 +1,6 @@
 {
   "name": "fast-sax",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser.",
   "author": "Paul Nann",
   "license": "MIT",
@@ -10,14 +10,11 @@
   },
   "main": "lib/src/FastSax.js",
   "scripts": {
-    "test": "gulp test"
+    "build": "tsc && uglifyjs lib/FastSax.js -o lib/fast-sax.min.js --compress --mangle",
+    "test": "nyc mocha --reporter dot --require ts-node/register --require source-map-support/register --recursive tst/TestCases/**/*.ts",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
-  "typings": "lib/FastSax.d.ts",
-  "ava": {
-    "files": [
-      "lib/tst/TestCases/**/*.js"
-    ]
-  },
+  "typings": "lib/src/FastSax.d.ts",
   "nyc": {
     "lines": 100,
     "statements": 99,
@@ -25,9 +22,15 @@
     "branches": 96,
     "cache": false,
     "check-coverage": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": [
+      "src"
+    ],
     "exclude": [
-      "lib/tst",
-      "node_modules"
+      "**/*.d.ts"
     ],
     "reporter": [
       "lcov",
@@ -35,22 +38,19 @@
     ]
   },
   "devDependencies": {
-    "ava": "^0.16.0",
-    "chai": "^3.5.0",
-    "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-ava": "^0.14.1",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-rename": "^1.2.2",
-    "gulp-transform": "^1.1.0",
-    "gulp-typescript": "^3.0.2",
-    "gulp-typings": "^2.0.4",
-    "gulp-uglify": "^2.0.0",
-    "gulp-util": "^3.0.7",
-    "merge2": "^1.0.2",
-    "nyc": "^8.3.2",
-    "sinon": "^1.17.6",
-    "sinon-chai": "^2.8.0",
-    "typescript": "^2.0.3"
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
+    "mocha": "^4.0.1",
+    "nyc": "^11.2.1",
+    "sinon": "^4.0.1",
+    "sinon-chai": "^2.14.0",
+    "source-map-support": "^0.5.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3",
+    "uglify-js": "^3.1.4",
+    "@types/mocha": "^2.2.43",
+    "@types/chai": "^4.0.4",
+    "@types/sinon": "^2.3.6",
+    "@types/sinon-chai": "^2.7.29"
   }
 }

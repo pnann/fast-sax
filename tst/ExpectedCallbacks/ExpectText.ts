@@ -1,6 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
 import chai = require("chai");
-import expect = chai.expect;
+const expect = chai.expect;
+
 import ExpectedCallback = require("../ExpectedCallback");
 
 function ExpectText(expectedText: string): ExpectedCallback {
