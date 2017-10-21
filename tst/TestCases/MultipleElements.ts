@@ -28,7 +28,7 @@ describe("Multiple elements", () => {
             ExpectElementEnd("random")
         ]
     });
-    
+
     runTest({
         name: "Multiple nested elements",
         input: "<dimension><yep definitely='blah'/></dimension><random>super blah</random>",

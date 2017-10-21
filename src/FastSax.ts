@@ -35,17 +35,20 @@ class FastSax {
     /**
      * Fired when a text node is parsed.
      *
+     * FastSax does NOT trim or otherwise change text values. Indentation and other whitespace will result in onText
+     * being called.
+     *
      * @param {() => string} getText A function returning the node text as a string.
      */
     public onText: (getText: () => string) => void = noOp;
 
     /**
-     * Fired when a a new element has been found.
+     * Fired when a new element has been found.
      *
      * @param {string} elementName The name of the element.
      * @param {() => {[attribute: string]: string}} getAttributes A function returning a map of attribute names to values.
      */
-    public onElementStart: (elementName: string, getAttributes: () => {[attribute: string]: string}) => void = noOp;
+    public onElementStart: (elementName: string, getAttributes: () => { [attribute: string]: string }) => void = noOp;
 
     /**
      * Fired when an element's end has been found.
@@ -75,16 +78,18 @@ class FastSax {
      */
     public parse(xmlContents: string) {
         var activeType: Type = null;
-        var lastElementEnd = 0;
+        var textStartIndex = xmlContents.charAt(0) === "\uFEFF" ? 1 : 0;
+        var lastElementEnd = textStartIndex;
 
-        for (var startIndex = 0; startIndex < xmlContents.length; startIndex++) {
+        for (var startIndex = textStartIndex; startIndex < xmlContents.length; startIndex++) {
             if (activeType === null) {
                 if (xmlContents.charCodeAt(startIndex) === FastSax.OPEN_BRACKET) {
+                    if (startIndex - lastElementEnd > 0) {
+                        this.onText(() => xmlContents.substring(lastElementEnd, startIndex));
+                    }
+
                     var nextChar = xmlContents.charCodeAt(startIndex + 1);
                     if (nextChar === FastSax.FORWARD_SLASH) {
-                        if (startIndex - lastElementEnd > 0) {
-                            this.onText(() => xmlContents.substring(lastElementEnd, startIndex));
-                        }
                         activeType = Type.CLOSE_ELEMENT;
                         startIndex += 1;
                     } else if (nextChar === FastSax.EXCLAMATION_POINT) {
@@ -163,8 +168,8 @@ class FastSax {
      * @param {string} end The last index of the attribute block, exclusive.
      * @returns {{[attribute: string]: string}} A map of string attribute names to their associated values.
      */
-    private static extractAttributes(sourceText: string, start: number, end: number): {[attribute: string]: string} {
-        var attributeMap: {[attribute: string]: string} = {};
+    private static extractAttributes(sourceText: string, start: number, end: number): { [attribute: string]: string } {
+        var attributeMap: { [attribute: string]: string } = {};
 
         var activeAttribute: string = null;
         for (var currentIndex = start; currentIndex < end; currentIndex++) {

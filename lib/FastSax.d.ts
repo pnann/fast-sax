@@ -18,11 +18,14 @@ declare class FastSax {
     /**
      * Fired when a text node is parsed.
      *
+     * FastSax does NOT trim or otherwise change text values. If you're parsing content with whitespace (e.g. indentation),
+     * those will result in onText being called.
+     *
      * @param {() => string} getText A function returning the node text as a string.
      */
     onText: (getText: () => string) => void;
     /**
-     * Fired when a a new element has been found.
+     * Fired when a new element has been found.
      *
      * @param {string} elementName The name of the element.
      * @param {() => {[attribute: string]: string}} getAttributes A function returning a map of attribute names to values.

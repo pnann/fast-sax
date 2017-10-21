@@ -5,7 +5,7 @@ Under 1KB gzipped and ready for your well-formed XML needs.
 ## Features
 * A SAX-like API.
 * Support for parsing regular `elements`, `text nodes`, `CDATA`, and `comments`.
-* Absolutely no support for anything else. No processing instructions, no auto-unescaping.
+* Absolutely no support for anything else. No processing instructions, no auto-unescaping, no text trimming.
 * ECMAScript 3 support (IE6+).
 * Fully unit tested.
 * <1KB gzipped.
@@ -59,6 +59,9 @@ parser.onElementEnd = function(elementName) {
 /*
 * This function will be called every time a text node has been found. It is the user's responsibility to keep track
 * of the parent element as needed.
+*
+* FastSax does NOT trim or otherwise change text values. Indentation and other whitespace will result in onText
+* being called.
 * 
 * The only argument, getText, is a function which returns the raw text as a string.
 */
