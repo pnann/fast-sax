@@ -1,6 +1,6 @@
 {
   "name": "fast-sax",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser.",
   "author": "Paul Nann",
   "license": "MIT",
@@ -8,13 +8,13 @@
     "type": "git",
     "url": "https://github.com/pnann/fast-sax.git"
   },
-  "main": "lib/src/FastSax.js",
+  "main": "lib/FastSax.js",
   "scripts": {
     "build": "tsc && uglifyjs lib/FastSax.js -o lib/fast-sax.min.js --compress --mangle",
     "test": "nyc mocha --reporter dot --require ts-node/register --require source-map-support/register --recursive tst/TestCases/**/*.ts",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
-  "typings": "lib/src/FastSax.d.ts",
+  "typings": "lib/FastSax.d.ts",
   "nyc": {
     "lines": 100,
     "statements": 99,
