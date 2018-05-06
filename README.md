@@ -1,4 +1,6 @@
 # fast-sax [![Build Status](https://travis-ci.org/pnann/fast-sax.svg)](https://travis-ci.org/pnann/fast-sax) ![npm dependencies](https://david-dm.org/pnann/fast-sax.svg) [![Coverage Status](https://coveralls.io/repos/github/pnann/fast-sax/badge.svg?branch=master)](https://coveralls.io/github/pnann/fast-sax?branch=master) [![npm version](https://badge.fury.io/js/fast-sax.svg)](https://badge.fury.io/js/fast-sax)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/pnann/fast-sax.svg)](https://greenkeeper.io/)
 > A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser. 
 Under 1KB gzipped and ready for your well-formed XML needs.
 
