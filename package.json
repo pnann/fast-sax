@@ -41,16 +41,16 @@
     "@types/chai": "^4.0.4",
     "@types/mocha": "^5.2.0",
     "@types/sinon": "^5.0.0",
-    "@types/sinon-chai": "^2.7.29",
+    "@types/sinon-chai": "^3.2.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.1",
     "mocha": "^5.1.1",
-    "nyc": "^12.0.2",
-    "sinon": "^5.0.4",
+    "nyc": "^13.0.1",
+    "sinon": "^6.3.4",
     "sinon-chai": "^3.0.0",
     "source-map-support": "^0.5.0",
-    "ts-node": "^6.0.3",
-    "typescript": "^2.5.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3",
     "uglify-js": "^3.1.4"
   }
 }

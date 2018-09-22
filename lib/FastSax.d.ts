@@ -18,8 +18,8 @@ declare class FastSax {
     /**
      * Fired when a text node is parsed.
      *
-     * FastSax does NOT trim or otherwise change text values. If you're parsing content with whitespace (e.g. indentation),
-     * those will result in onText being called.
+     * FastSax does NOT trim or otherwise change text values. Indentation and other whitespace will result in onText
+     * being called.
      *
      * @param {() => string} getText A function returning the node text as a string.
      */
@@ -65,7 +65,7 @@ declare class FastSax {
      * @param {string} end The last index of the attribute block, exclusive.
      * @returns {{[attribute: string]: string}} A map of string attribute names to their associated values.
      */
-    private static extractAttributes(sourceText, start, end);
+    private static extractAttributes;
     /**
      * Returns whether or not the text starts with a string at a certain position.
      *
@@ -75,6 +75,6 @@ declare class FastSax {
      *
      * @returns {boolean}
      */
-    private static startsWith(text, start, match);
+    private static startsWith;
 }
 export = FastSax;
