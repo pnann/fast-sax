@@ -16,16 +16,16 @@ var noOp: any = () => {
  */
 class FastSax {
 
-    private static OPEN_BRACKET = 60;
-    private static FORWARD_SLASH = 47;
-    private static EXCLAMATION_POINT = 33;
-    private static EQUALS = 61;
-    private static SPACE = 32;
-    private static TAB = 9;
-    private static NEW_LINE = 10;
-    private static CARRIAGE_RETURN = 13;
-    private static SINGLE_QUOTE = 39;
-    private static DOUBLE_QUOTE = 34;
+    private static OPEN_BRACKET = "<";
+    private static FORWARD_SLASH = "/";
+    private static EXCLAMATION_POINT = "!";
+    private static EQUALS = "=";
+    private static SPACE = " ";
+    private static TAB = "\t";
+    private static NEW_LINE = "\n";
+    private static CARRIAGE_RETURN = "\r";
+    private static SINGLE_QUOTE = "'";
+    private static DOUBLE_QUOTE = "\"";
 
     private static CDATA_PREFIX = "[CDATA[";
     private static CDATA_SUFFIX = "]]>";
@@ -85,12 +85,12 @@ class FastSax {
 
         for (var startIndex = textStartIndex; startIndex < xmlContents.length; startIndex++) {
             if (activeType === null) {
-                if (xmlContents.charCodeAt(startIndex) === FastSax.OPEN_BRACKET) {
+                if (xmlContents[startIndex] === FastSax.OPEN_BRACKET) {
                     if (startIndex - lastElementEnd > 0) {
                         this.onText(() => xmlContents.substring(lastElementEnd, startIndex));
                     }
 
-                    var nextChar = xmlContents.charCodeAt(startIndex + 1);
+                    var nextChar = xmlContents[startIndex + 1];
                     if (nextChar === FastSax.FORWARD_SLASH) {
                         activeType = Type.CLOSE_ELEMENT;
                         startIndex += 1;
@@ -116,7 +116,7 @@ class FastSax {
 
                 var elementName: string = null;
                 for (var i = startIndex; i < endIndex; i++) {
-                    var char = xmlContents.charCodeAt(i);
+                    var char = xmlContents[i];
                     if (char === FastSax.FORWARD_SLASH
                         || char === FastSax.SPACE
                         || char === FastSax.TAB
@@ -136,7 +136,7 @@ class FastSax {
                 if (elementName) {
                     this.onElementStart(elementName, () => FastSax.extractAttributes(xmlContents, startIndex, endIndex));
 
-                    if (xmlContents.charCodeAt(endIndex - 1) === FastSax.FORWARD_SLASH) {
+                    if (xmlContents[endIndex - 1] === FastSax.FORWARD_SLASH) {
                         this.onElementEnd(elementName);
                     }
                 }
@@ -180,7 +180,7 @@ class FastSax {
 
         var activeAttribute: string = null;
         for (var currentIndex = start; currentIndex < end; currentIndex++) {
-            var char = sourceText.charCodeAt(currentIndex);
+            var char = sourceText[currentIndex];
             if (activeAttribute === null) {
                 if (char === FastSax.EQUALS) {
                     activeAttribute = sourceText.substring(start, currentIndex);
@@ -217,17 +217,11 @@ class FastSax {
      * @returns {boolean}
      */
     private static startsWith(text: string, start: number, match: string): boolean {
-        if (text.length - start < match.length) {
-            return false;
+        if ((<any> text).startsWith) {
+            return (<any> text).startsWith(match, start);
         }
 
-        for (var i = 0; i < match.length; i++) {
-            if (text.charCodeAt(start + i) !== match.charCodeAt(i)) {
-                return false;
-            }
-        }
-
-        return true;
+        return text.substr(start, match.length) === match;
     };
 }
 

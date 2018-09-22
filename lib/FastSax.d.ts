@@ -6,8 +6,10 @@ declare class FastSax {
     private static FORWARD_SLASH;
     private static EXCLAMATION_POINT;
     private static EQUALS;
-    private static NEW_LINE;
     private static SPACE;
+    private static TAB;
+    private static NEW_LINE;
+    private static CARRIAGE_RETURN;
     private static SINGLE_QUOTE;
     private static DOUBLE_QUOTE;
     private static CDATA_PREFIX;
