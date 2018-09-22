@@ -20,8 +20,10 @@ class FastSax {
     private static FORWARD_SLASH = 47;
     private static EXCLAMATION_POINT = 33;
     private static EQUALS = 61;
-    private static NEW_LINE = 10;
     private static SPACE = 32;
+    private static TAB = 9;
+    private static NEW_LINE = 10;
+    private static CARRIAGE_RETURN = 13;
     private static SINGLE_QUOTE = 39;
     private static DOUBLE_QUOTE = 34;
 
@@ -115,7 +117,12 @@ class FastSax {
                 var elementName: string = null;
                 for (var i = startIndex; i < endIndex; i++) {
                     var char = xmlContents.charCodeAt(i);
-                    if (char === FastSax.FORWARD_SLASH || char === FastSax.SPACE) {
+                    if (char === FastSax.FORWARD_SLASH
+                        || char === FastSax.SPACE
+                        || char === FastSax.TAB
+                        || char === FastSax.NEW_LINE
+                        || char === FastSax.CARRIAGE_RETURN) {
+
                         elementName = xmlContents.substring(startIndex, i);
                         startIndex = i;
                         break;
@@ -179,9 +186,13 @@ class FastSax {
                     activeAttribute = sourceText.substring(start, currentIndex);
                     currentIndex += 1;
                     start = currentIndex;
-                } else if (char === FastSax.SPACE || char === FastSax.NEW_LINE) {
-                    currentIndex += 1;
-                    start = currentIndex;
+                } else if (char === FastSax.FORWARD_SLASH
+                    || char === FastSax.SPACE
+                    || char === FastSax.TAB
+                    || char === FastSax.NEW_LINE
+                    || char === FastSax.CARRIAGE_RETURN) {
+
+                    start = currentIndex + 1;
                 }
             } else {
                 if (char === FastSax.DOUBLE_QUOTE || char === FastSax.SINGLE_QUOTE) {
