@@ -1,6 +1,6 @@
 {
   "name": "fast-sax",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A minimal, dependency free, ES3 compatible, well tested, and lightning fast SAX-like XML parser for Node and the browser.",
   "author": "Paul Nann",
   "license": "MIT",
