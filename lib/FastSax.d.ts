@@ -17,6 +17,8 @@ declare class FastSax {
     private static ELEMENT_SUFFIX;
     private static COMMENT_PREFIX;
     private static COMMENT_SUFFIX;
+    private nameRegExp;
+    private attributeRegExp;
     /**
      * Fired when a text node is parsed.
      *
@@ -67,7 +69,7 @@ declare class FastSax {
      * @param {string} end The last index of the attribute block, exclusive.
      * @returns {{[attribute: string]: string}} A map of string attribute names to their associated values.
      */
-    private static extractAttributes;
+    private extractAttributes;
     /**
      * Returns whether or not the text starts with a string at a certain position.
      *
