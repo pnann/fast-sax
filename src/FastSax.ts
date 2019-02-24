@@ -8,6 +8,26 @@ enum Type {
     CDATA
 }
 
+/**
+ * A regular expression that matches element names. This is a simplified version of the `Name` (https://www.w3.org/TR/xml/#NT-Name) rule
+ * from the XML specification.
+ */
+const NAME_START_CHAR = "[:A-Z_a-z]";
+const NAME_CHAR = "[:A-Z_a-z.0-9-]";
+const NAME = `${NAME_START_CHAR}${NAME_CHAR}*`;
+
+/**
+ * A regular expression that matches whitespaces. This is equivalent to the `S` (https://www.w3.org/TR/xml/#NT-S) rule 
+ * from the XML specification.
+ */
+const S = "[ \\r\\n\\t]*";
+
+/**
+ * A regular expression that matches attribute name and value pairs. This is a simplified version of the `Attribute`
+ * (https://www.w3.org/TR/xml/#NT-Attribute) rule from the XML specification, that also chomps white spaces.
+ */
+const ATTRIBUTE = `${S}(${NAME})${S}=${S}[\"']([^\"']*)[\"']${S}`;
+
 var noOp: any = () => {
 };
 
@@ -33,6 +53,9 @@ class FastSax {
     private static ELEMENT_SUFFIX = ">";
     private static COMMENT_PREFIX = "--";
     private static COMMENT_SUFFIX = "-->";
+
+    private nameRegExp = new RegExp(`(${NAME})`, "gm");
+    private attributeRegExp = new RegExp(ATTRIBUTE, "gm");
 
     /**
      * Fired when a text node is parsed.
@@ -115,18 +138,11 @@ class FastSax {
                 if (endIndex === -1) break;
 
                 var elementName: string = null;
-                for (var i = startIndex; i < endIndex; i++) {
-                    var char = xmlContents[i];
-                    if (char === FastSax.FORWARD_SLASH
-                        || char === FastSax.SPACE
-                        || char === FastSax.TAB
-                        || char === FastSax.NEW_LINE
-                        || char === FastSax.CARRIAGE_RETURN) {
-
-                        elementName = xmlContents.substring(startIndex, i);
-                        startIndex = i;
-                        break;
-                    }
+                this.nameRegExp.lastIndex = startIndex;
+                var match = this.nameRegExp.exec(xmlContents);
+                if (match !== null) {
+                    elementName = match[1];
+                    startIndex = this.nameRegExp.lastIndex;
                 }
 
                 if (elementName === null) {
@@ -134,7 +150,7 @@ class FastSax {
                 }
 
                 if (elementName) {
-                    this.onElementStart(elementName, () => FastSax.extractAttributes(xmlContents, startIndex, endIndex));
+                    this.onElementStart(elementName, () => this.extractAttributes(xmlContents, startIndex, endIndex));
 
                     if (xmlContents[endIndex - 1] === FastSax.FORWARD_SLASH) {
                         this.onElementEnd(elementName);
@@ -175,33 +191,24 @@ class FastSax {
      * @param {string} end The last index of the attribute block, exclusive.
      * @returns {{[attribute: string]: string}} A map of string attribute names to their associated values.
      */
-    private static extractAttributes(sourceText: string, start: number, end: number): { [attribute: string]: string } {
+    private extractAttributes(sourceText: string, start: number, end: number): { [attribute: string]: string } {
+        var contents = sourceText.substring(start, end);
+        start = 0;
+        end = contents.length;
+
         var attributeMap: { [attribute: string]: string } = {};
 
-        var activeAttribute: string = null;
-        for (var currentIndex = start; currentIndex < end; currentIndex++) {
-            var char = sourceText[currentIndex];
-            if (activeAttribute === null) {
-                if (char === FastSax.EQUALS) {
-                    activeAttribute = sourceText.substring(start, currentIndex);
-                    currentIndex += 1;
-                    start = currentIndex;
-                } else if (char === FastSax.FORWARD_SLASH
-                    || char === FastSax.SPACE
-                    || char === FastSax.TAB
-                    || char === FastSax.NEW_LINE
-                    || char === FastSax.CARRIAGE_RETURN) {
+        this.attributeRegExp.lastIndex = start;
 
-                    start = currentIndex + 1;
-                }
-            } else {
-                if (char === FastSax.DOUBLE_QUOTE || char === FastSax.SINGLE_QUOTE) {
-                    attributeMap[activeAttribute] = sourceText.substring(start + 1, currentIndex);
-
-                    start = currentIndex + 1;
-                    activeAttribute = null;
-                }
+        while (this.attributeRegExp.lastIndex < end) {
+            var match = this.attributeRegExp.exec(contents);
+            if (match === null) {
+                break;
             }
+
+            var name = match[1];
+            var value = match[2];
+            attributeMap[name] = value;
         }
 
         return attributeMap;
