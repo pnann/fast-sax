@@ -10,7 +10,7 @@ interface ExpectedCallback {
     /**
      * The function to attach to the given callback.
      */
-    onCall?: Function;
+    onCall?: (...args: any[]) => any;
 }
 
 export = ExpectedCallback;
